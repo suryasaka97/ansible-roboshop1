@@ -1,0 +1,31 @@
+- name: provisioning the Mongodb server
+  hosts: mangobd
+  become: yes
+  tasks:
+  - name: copy mongodbrepo
+    ansible.builtin.copy:
+     src: mongo.repo
+     dest: /etc/yum.repos.d/mongo.repo
+
+  - name: Installing mongodbrepo
+    ansible.builtin.dnf:
+     name: mongodb-org
+     state: present
+
+  - name: start and enable mongodb service
+    ansible.builtin.service:
+     name: mongodb
+     state: started
+     enabled: yes
+
+  - name: Update listen address from 127.0.0.1 to 0.0.0.0 in /etc/mongod.conf
+    ansible.builtin.replace:
+     path: /etc/mongod.conf
+     regexp: 127.0.0.1
+     replace: 0.0.0.0
+
+  - name: Restart the service to make the changes effected.
+    ansible.builtin.service:
+     name: mongodb
+     state: reloaded       
+           
