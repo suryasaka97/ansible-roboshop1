@@ -27,5 +27,5 @@
   - name: Restart the service to make the changes effected.
     ansible.builtin.service:
      name: mongod
-     state: reloaded       
+     state: restarted       
            
