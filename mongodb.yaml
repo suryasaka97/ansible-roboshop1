@@ -1,5 +1,5 @@
 - name: provisioning the Mongodb server
-  hosts: mangobd
+  hosts: mongobd
   become: yes
   tasks:
   - name: copy mongodbrepo
