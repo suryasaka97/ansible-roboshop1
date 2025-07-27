@@ -1,0 +1,79 @@
+- name: provisioning catalogue application
+  hosts: catalogue
+  tasks:
+  - name: disable the default nodejs version
+    ansible.builtin.command: "dnf module disable nodejs -y"
+
+  - name: enable the nodejs version;20
+    ansible.builtin.command: "dnf module enable nodejs:20 -y"  
+
+  - name: install nodejs
+    ansible.builtin.dnf:
+     name: nodejs
+     state: present
+
+  - name: add application user
+    ansible.builtin.user:
+     name: roboshop
+     shell: /sbin/nologin
+     home: /app
+     state: present
+
+  - name: settingup app directory
+    ansible.builtin.file:
+     path: /app
+     state: directory   
+          
+  - name: Download the application code
+    ansible.builtin.get_url:
+     url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+     dest: /tmp/catalogue.zip
+
+  - name: Unzip files in app directory
+    ansible.builtin.unarchive:
+     src: /tmp/catalogue.zip
+     dest: /app
+     remote_src: yes      
+
+  - name: Installing npm dependency
+    community.general.npm:
+     path: /app
+
+  - name: setting up system_d service to be managed by systemctl
+    ansible.builtin.copy:
+     src: catalogue.service
+     dest: /etc/systemd/system/catalogue.service
+
+  - name: loading the systemd service
+    ansible.builtin.systemd_service:
+     daemon_reload: true
+
+  - name: enable and restart the systemctl service
+    ansible.builtin.service:
+     name: catalogue
+     state: started
+     enabled: yes
+
+  - name: setting up mongodb repo
+    ansible.builtin.copy:
+     src: mongo.repo
+     dest: /etc/yum.repos.d/mongo.repo
+
+  - name: installing mongodb client
+    ansible.builtin.dnf:
+     name: mongodb-mongosh
+     state: present            
+
+  - name: check products are loaded or not
+    ansible.builtin.command: mongosh --host mongodb.anantya.space --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+    register: product_load_output 
+  
+  - name: Loading products to the database
+    ansible.builtin.shell: mongosh --host MONGODB-SERVER-IPADDRESS </app/db/master-data.js
+    when: product_load_output.stdout < 0
+
+  - name: products are already loaded to database
+    ansible.builtin.debug:  
+     msg: Producta are already loaded
+    when: product_load_output > 0 
+
