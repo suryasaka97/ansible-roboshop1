@@ -76,5 +76,5 @@
   - name: products are already loaded to database
     ansible.builtin.debug:  
      msg: Producta are already loaded
-    when: product_load_output > 0 
+    when: (product_load_output | int) > 0 
 
