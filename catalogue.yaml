@@ -70,7 +70,7 @@
     register: product_load_output 
   
   - name: Loading products to the database
-    ansible.builtin.shell: mongosh --host MONGODB-SERVER-IPADDRESS </app/db/master-data.js
+    ansible.builtin.shell: mongosh --host mongodb.anantya.space </app/db/master-data.js
     when: product_load_output.stdout | int < 0
 
   - name: products are already loaded to database
