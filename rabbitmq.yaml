@@ -14,12 +14,16 @@
      state: present    
 
   - name: start and enable system services
+    tags:
+    - import
     ansible.builtin.service:
-     name: rabbitmq
+     name: rabbitmq-server
      state: started
      enabled: yes   
 
   - name: adding user and setting the permissions
+    tags:
+    - import
     community.rabbitmq.rabbitmq_user:
      user: roboshop
      password: roboshop123
