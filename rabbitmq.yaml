@@ -1,0 +1,32 @@
+- name: setting rabbitmq server
+  hosts: rabbitmq
+  become: yes
+  tasks: 
+  
+  - name: copying rabbitmq repo
+    ansible.builtin.copy:
+     src: rabbitmq.repo
+     dest: /etc/yum.repos.d/rabbitmq.repo
+
+  - name: installing rabbitmq
+    ansible.builtin.dnf:
+     name: rabbitmq-server
+     state: present    
+
+  - name: start and enable system services
+    ansible.builtin.service:
+     name: rabbitmq
+     state: started
+     enabled: yes   
+
+  - name: adding user and setting the permissions
+    community.rabbitmq.rabbitmq_user:
+     user: roboshop
+     password: roboshop123
+     permissions:
+          - vhost: /
+            configure_priv: .*
+            read_priv: .*
+            write_priv: .*
+     state: present    
+

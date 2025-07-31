@@ -18,7 +18,7 @@
      name: roboshop
      shell: /sbin/nologin
      home: /app
-     state: present
+     state: present #you created normal user, not system user
 
   - name: settingup app directory
     ansible.builtin.file:

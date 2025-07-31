@@ -1,0 +1,37 @@
+- name: provisioning redis server
+  hosts: redis
+  tasks:
+  
+  - name: Disable the default redis version
+    ansible.builtin.command: dnf module disable redis -y
+
+  - name: Enable the specific redis version 7
+    ansible.builtin.command: dnf module enable redis:7 -y
+
+  - name: install redis
+    ansible.builtin.dnf:
+     name: redis
+     state: present
+
+  - name: replace port number from local to all(0.0.0.0)
+    ansible.builtin.replace:
+     path: /etc/redis/redis.conf
+     regexp: '127\.0\.0\.1' 
+     # . (dot) specifies any single character — e.g., 127y0j0k0 would match 127.0.0.1 if dots are not escaped
+     # Use backslash (\) to escape dot, so it matches a literal dot (.)
+     # \s matches a whitespace character (space, tab, newline)
+     # + means one or more occurrences of the preceding character/class (e.g., \s+ means one or more spaces)
+     replace: 0.0.0.0
+
+  - name: replace protected mode from yes to no
+    ansible.builtin.lineinfile:
+     path: /etc/redis/redis.conf
+     regexp: ^protected-mode\s+ yes # \s here its looks for space and + means more thn one space
+     line: protected-mode no     
+
+  - name: Restarting the redis systemctl service
+    ansible.builtin.systemd_service:
+     name: redis
+     state: started
+     enabled: true 
+
