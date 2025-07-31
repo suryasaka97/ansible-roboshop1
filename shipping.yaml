@@ -38,8 +38,8 @@
     args:
      chdir: /app   
   
-  - name: cut and rename target/shipping-1.0.jar to shipping.jar 
-    ansibile.builtin.command: mv target/shipping-1.0.jar shipping.jar
+  - name: "cut and rename target/shipping-1.0.jar to shipping.jar"
+    ansible.builtin.command: "mv target/shipping-1.0.jar shipping.jar"
     args:
      chdir: /app
 
