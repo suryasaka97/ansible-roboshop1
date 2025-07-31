@@ -27,13 +27,13 @@
 
   - name: removing files inside html directory
     ansible.builtin.file:
-     path: /usr/share/nginx/html/*
+     path: /usr/share/nginx/html
      state: absent
 
-  # - name: creating the html directory
-  #   ansibel.builtin.file:
-  #    path: /usr/share/nginx/html
-  #    state: directory    
+   -name: creating the html directory
+    ansibel.builtin.file:
+     path: /usr/share/nginx/html
+     state: directory    
 
 
   - name: Extracting frontend content to html folder
