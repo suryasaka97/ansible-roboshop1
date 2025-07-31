@@ -35,13 +35,13 @@
 
   - name: unzipping application code to app directory
     ansible.builtin.unarchive:
-    src: /tmp/cart.zip
-    dest: /app
-    remote_src: true
+     src: /tmp/cart.zip
+     dest: /app
+     remote_src: true
 
   - name: Downloading the dependencies using build tool npm
     community.general.npm:
-    path: /app
+     path: /app
 
   - name: copying cart service configuration
     ansible.builtin.copy:
