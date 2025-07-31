@@ -40,7 +40,7 @@
 
   - name: installing dependencies of package.json using npm
     community.general.npm:
-    path: /app
+     path: /app
 
   - name: reload daemon service
     ansible.builtin.systemd_service:
