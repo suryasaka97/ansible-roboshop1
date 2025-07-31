@@ -9,7 +9,7 @@
      state: present
 
   - name: adding application user
-    ansible.byuiltin.user:
+    ansible.builtin.user:
      name: roboshop
      comment: roboshop system user
      shell: /sbin/nologin 
@@ -55,6 +55,7 @@
      
   - name: start and enable system services
     ansible.builtin.service:
+     name: shipping
      state: started
      enabled: yes   
 
