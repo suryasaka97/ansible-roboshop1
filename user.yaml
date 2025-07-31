@@ -42,6 +42,11 @@
     community.general.npm:
      path: /app
 
+  - name: copying user service configuration
+    ansible.builtin.copy:
+     src: shipping.service
+     dest: /etc/systemd/system/shipping.service    
+
   - name: reload daemon service
     ansible.builtin.systemd_service:
      daemon_reload: true
