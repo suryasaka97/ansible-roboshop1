@@ -16,11 +16,11 @@
 
   - name: adding system-user
     ansible.builtin.user:
-    name: roboshop
-    shell: /sbin/nologin
-    home: /app
-    comment: "roboshop system user"
-    system: true   
+     name: roboshop
+     shell: /sbin/nologin
+     home: /app
+     comment: "roboshop system user"
+     system: true   
 
   - name: creating the app directory
     ansible.builtin.file:
