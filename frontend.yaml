@@ -35,12 +35,16 @@
      path: /usr/share/nginx/html
      state: directory    
 
-
   - name: Extracting frontend content to html folder
     ansible.builtin.unarchive:
      src: /tmp/frontend.zip
      dest: /usr/share/nginx/html
      remote_src: yes
+  
+  - name: remove default nginx conf
+    ansible.builtin.file:
+      path: /etc/nginx/nginx.conf
+      state: absent
 
   - name: copy nginx configuration
     ansible.builtin.copy:
